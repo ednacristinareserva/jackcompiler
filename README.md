@@ -98,9 +98,6 @@ Os arquivos XML gerados foram comparados com os respectivos arquivos XML de refe
 
 ## 10. Verificação dos arquivos de referência
 
-
-## 10. Verificação dos arquivos de referência
-
 Os arquivos gerados pelo analisador podem ser comparados com os XMLs de referência oficiais usando o PowerShell:
 
 ```powershell
