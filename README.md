@@ -93,8 +93,10 @@ Os arquivos XML gerados foram comparados com os respectivos arquivos XML de refe
 
 ## 9. Integrantes
 
-- **Discente:** [Edna Cristina Durans Santos] — Matrícula: [20260038268]
-- **Discente:** [Cleila Monteiro Dutra Galiz] — Matrícula: [2023027500]
+- **Discente:** Edna Cristina Durans Santos — Matrícula: 20260038268
+- **Discente:** Cleila Monteiro Dutra Galiz — Matrícula: 2023027500
+
+## 10. Verificação dos arquivos de referência
 
 
 ## 10. Verificação dos arquivos de referência
