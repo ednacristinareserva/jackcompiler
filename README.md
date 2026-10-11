@@ -1,6 +1,3 @@
-# UNIVERSIDADE FEDERAL DO MARANHAO - UFMA
-# EECP0026 - COMPILADORES
-# Docente: Dr. Sergio Souza Costa
 
 # JackCompiler — Analisador Léxico
 
@@ -10,7 +7,7 @@ Este projeto consiste na implementação de um analisador léxico para a linguag
 
 O analisador léxico é responsável por ler um arquivo de código-fonte `.jack`, identificar os elementos da linguagem e gerar um arquivo XML contendo os tokens reconhecidos.
 
-O projeto faz parte da disciplina de Compiladores e corresponde à primeira etapa de desenvolvimento do compilador Jack.
+O projeto faz parte da disciplina EECP0026 - Compiladores, ministrada pelo Docente Dr. Sergio Souza Costa e corresponde à primeira etapa de desenvolvimento do compilador Jack.
 
 ## 2. Objetivos
 

@@ -1,0 +1,29 @@
+<tokens>
+<keyword> class </keyword>
+<identifier> Simbolos </identifier>
+<symbol> { </symbol>
+<keyword> function </keyword>
+<keyword> void </keyword>
+<identifier> teste </identifier>
+<symbol> ( </symbol>
+<symbol> ) </symbol>
+<symbol> { </symbol>
+<keyword> let </keyword>
+<identifier> a </identifier>
+<symbol> = </symbol>
+<identifier> b </identifier>
+<symbol> &lt; </symbol>
+<identifier> c </identifier>
+<symbol> ; </symbol>
+<keyword> let </keyword>
+<identifier> d </identifier>
+<symbol> = </symbol>
+<identifier> e </identifier>
+<symbol> &amp; </symbol>
+<identifier> f </identifier>
+<symbol> ; </symbol>
+<keyword> return </keyword>
+<symbol> ; </symbol>
+<symbol> } </symbol>
+<symbol> } </symbol>
+</tokens>

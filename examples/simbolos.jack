@@ -1,0 +1,8 @@
+
+class Simbolos {
+    function void teste() {
+        let a = b < c;
+        let d = e & f;
+        return;
+    }
+}

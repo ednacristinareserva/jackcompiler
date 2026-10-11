@@ -1,9 +1,13 @@
 
 class Teste {
+    // Comentario de linha
     function void main() {
+        /* Comentario
+           de bloco */
         var int numero;
         let numero = 123;
         do Output.printString("Ola Jack");
+        do Output.printString("Texto com // e /* teste */");
         return;
     }
 }
