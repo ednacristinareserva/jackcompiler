@@ -23,11 +23,17 @@ def main():
         print("Uso: python src/main.py <arquivo.jack>")
         sys.exit(1)
 
+  
     file_path = Path(sys.argv[1])
+
+    if file_path.suffix.lower() != ".jack":
+        print("Erro: o arquivo deve ter a extensão .jack")
+        sys.exit(1)
 
     if not file_path.is_file():
         print(f"Erro: arquivo não encontrado: {file_path}")
         sys.exit(1)
+
     # localiza e verificar o arquivo
     try:
         source = file_path.read_text(encoding="utf-8")
