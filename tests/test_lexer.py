@@ -134,5 +134,45 @@ class TestLexer(unittest.TestCase):
             Lexer(source).tokenize()
 
 
+    def test_tokens_without_spaces(self):
+        source = "let x=10;"
+        tokens = Lexer(source).tokenize()
+
+        self.assertEqual(
+            tokens,
+            [
+                ("keyword", "let"),
+                ("identifier", "x"),
+                ("symbol", "="),
+                ("integerConstant", "10"),
+                ("symbol", ";"),
+            ],
+        )
+
+    def test_ignores_different_whitespace(self):
+        source = "class\tMain {\nreturn;\n}"
+        tokens = Lexer(source).tokenize()
+
+        self.assertEqual(
+            tokens,
+            [
+                ("keyword", "class"),
+                ("identifier", "Main"),
+                ("symbol", "{"),
+                ("keyword", "return"),
+                ("symbol", ";"),
+                ("symbol", "}"),
+            ],
+        )
+
+    def test_identifier_with_underscore_and_numbers(self):
+        source = "minha_variavel2"
+        tokens = Lexer(source).tokenize()
+
+        self.assertEqual(
+            tokens,
+            [("identifier", "minha_variavel2")],
+        )
+
 if __name__ == "__main__":
     unittest.main()
