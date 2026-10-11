@@ -1,0 +1,9 @@
+
+class Teste {
+    function void main() {
+        var int numero;
+        let numero = 123;
+        do Output.printString("Ola Jack");
+        return;
+    }
+}
