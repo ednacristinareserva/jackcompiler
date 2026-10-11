@@ -1,61 +1,77 @@
-#implementacao do analisador
-import re
-
-
+# palavras reservadas 
 KEYWORDS = {
     "class", "constructor", "function", "method", "field", "static",
     "var", "int", "char", "boolean", "void", "true", "false", "null",
     "this", "let", "do", "if", "else", "while", "return"
 }
-
+# reconhece simbolos
 SYMBOLS = set("{}()[].,;+-*/&|<>=~") # reconhece simbolos
-
 
 class Lexer:
     def __init__(self, source):
         self.source = source
-
-    def remove_comments(self):
-        pattern = r'"(?:\\.|[^"\\])*"|//[^\n]*|/\*.*?\*/'
-        return re.sub(
-            pattern,
-            lambda match: match.group(0)
-            if match.group(0).startswith('"')
-            else "",
-            self.source,
-            flags=re.DOTALL
-        )
-
-    def tokenize(self): # percorre o codigo, separa elementos e gera erro em caracteres invalidos
-        source = self.remove_comments() # remove comentários (// e /*...*/) sem afetar texto dentro de strings
+    # percorre o codigo, separa elementos e gera erro em caracteres invalidos
+    def tokenize(self): 
+        # remove comentários (// e /*...*/) sem afetar texto dentro de strings
+        source = self.source 
         tokens = []
         i = 0
 
         while i < len(source):
             char = source[i]
 
+            # ignora espacos, tabulacoes e quebras de linha
             if char.isspace():
                 i += 1
                 continue
 
-            if char in SYMBOLS: # reconhece simbolos
+            # ignora comentario de linha: //
+            if source.startswith("//", i):
+                while i < len(source) and source[i] not in "\r\n":
+                    i += 1
+                continue
+
+            # ignora comentario de bloco: /* ... */
+            if source.startswith("/*", i):
+                end = source.find("*/", i + 2)
+
+                if end == -1:
+                    raise ValueError(
+                        "Comentario de bloco sem fechamento."
+                    )
+
+                i = end + 2
+                continue
+
+            # reconhece as strings
+            if char == '"':
+                start = i + 1
+                i += 1
+
+                while i < len(source) and source[i] != '"':
+                    if source[i] in "\r\n":
+                        raise ValueError(
+                            "String nao pode atravessar linhas."
+                        )
+                    i += 1
+
+                if i >= len(source):
+                    raise ValueError(
+                        "String sem aspas de fechamento."
+                    )
+
+                value = source[start:i]
+                tokens.append(("stringConstant", value))
+                i += 1
+                continue
+
+            # reconhece simbolos
+            if char in SYMBOLS:
                 tokens.append(("symbol", char))
                 i += 1
                 continue
 
-            if char == '"':
-                end = source.find('"', i + 1)
-                if end == -1:
-                    raise ValueError("String sem aspas de fechamento.")
-
-                value = source[i + 1:end]
-                if "\n" in value or "\r" in value:
-                    raise ValueError("String não pode atravessar linhas.")
-
-                tokens.append(("stringConstant", value))
-                i = end + 1
-                continue
-
+            # reconhece constantes inteiras
             if char.isdigit():
                 start = i
 
@@ -73,6 +89,7 @@ class Lexer:
                 tokens.append(("integerConstant", value))
                 continue
 
+            # reconhece palavras reservadas e identificadores
             if char.isalpha() or char == "_":
                 start = i
 
@@ -84,15 +101,17 @@ class Lexer:
 
                 value = source[start:i]
 
-                if value in KEYWORDS: # guarda as palavras reservadas da linguagem Jack
+                # guarda as palavras reservadas da linguagem jack
+                if value in KEYWORDS:
                     tokens.append(("keyword", value))
                 else:
                     tokens.append(("identifier", value))
 
                 continue
 
+            # reejeita caracteres que nao pertencem a linguagem
             raise ValueError(
-                f"Caractere inválido: {char!r} na posição {i}"
+                f"Caractere invalido: {char!r} na posicao {i}"
             )
 
         return tokens
