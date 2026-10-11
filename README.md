@@ -100,7 +100,25 @@ Os arquivos XML gerados foram comparados com os respectivos arquivos XML de refe
 - **Discente:** [Cleila Monteiro Dutra Galiz] — Matrícula: [2023027500]
 
 
-## 10. Repositório
+## 10. Verificação dos arquivos de referência
+
+Os arquivos gerados pelo analisador podem ser comparados com os XMLs de referência oficiais usando o PowerShell:
+
+```powershell
+Compare-Object (Get-Content examples/referencias/MainT.xml) (Get-Content examples/oficiais/MainT.xml)
+Compare-Object (Get-Content examples/referencias/SquareT.xml) (Get-Content examples/oficiais/SquareT.xml)
+Compare-Object (Get-Content examples/referencias/SquareGameT.xml) (Get-Content examples/oficiais/SquareGameT.xml)
+```
+
+Quando os arquivos são idênticos, o comando `Compare-Object` não apresenta diferenças.
+
+Os testes automatizados podem ser executados com:
+
+```powershell
+python -m unittest discover -s tests -v
+```
+
+## 11. Repositório
 
 Código-fonte e histórico de desenvolvimento disponíveis em:
 
