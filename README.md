@@ -1,13 +1,14 @@
-
-# JackCompiler — Analisador Léxico
+# JackCompiler — Analisador Léxico e Sintático
 
 ## 1. Sobre o projeto
 
-Este projeto consiste na implementação de um analisador léxico para a linguagem Jack, desenvolvida no contexto do projeto JackCompiler do curso Nand2Tetris.
+Este projeto consiste na implementação de um analisador léxico e sintático para a linguagem Jack, desenvolvida no contexto do projeto JackCompiler do curso Nand2Tetris.
 
 O analisador léxico é responsável por ler um arquivo de código-fonte `.jack`, identificar os elementos da linguagem e gerar um arquivo XML contendo os tokens reconhecidos.
 
-O projeto faz parte da disciplina EECP0026 - Compiladores, ministrada pelo Docente Dr. Sergio Souza Costa e corresponde à primeira etapa de desenvolvimento do compilador Jack.
+O analisador sintático utiliza os tokens identificados pelo analisador léxico para verificar a estrutura gramatical do código Jack e gerar um arquivo XML representando a árvore sintática.
+
+O projeto faz parte da disciplina EECP0026 - Compiladores, ministrada pelo Docente Dr. Sergio Souza Costa e corresponde às etapas de análise léxica e sintática do compilador Jack.
 
 ## 2. Objetivos
 
@@ -15,6 +16,8 @@ O projeto faz parte da disciplina EECP0026 - Compiladores, ministrada pelo Docen
 - Reconhecer símbolos, constantes inteiras, constantes de texto e identificadores.
 - Ignorar espaços em branco, tabulações, quebras de linha e comentários.
 - Gerar um arquivo XML com os tokens encontrados.
+- Analisar a estrutura sintática de programas escritos em Jack.
+- Gerar um arquivo XML representando a árvore sintática.
 - Validar o funcionamento por meio de testes automatizados e arquivos de referência oficiais.
 
 ## 3. Tecnologias utilizadas
@@ -30,9 +33,11 @@ O projeto faz parte da disciplina EECP0026 - Compiladores, ministrada pelo Docen
 jackcompiler/
 ├── src/
 │   ├── main.py
-│   └── lexer.py
+│   ├── lexer.py
+│   └── parser.py
 ├── tests/
-│   └── test_lexer.py
+│   ├── test_lexer.py
+│   └── test_parser.py
 ├── examples/
 │   ├── Teste.jack
 │   ├── TesteT.xml
@@ -65,13 +70,21 @@ Comentários de linha (`//`) e de bloco (`/* ... */`), assim como espaços em br
 
 É necessário ter o Python 3 instalado.
 
-Na raiz do projeto, execute o comando abaixo para analisar um arquivo Jack:
+Na raiz do projeto, execute o comando abaixo para analisar lexicalmente um arquivo Jack:
 
 ```bash
 python src/main.py examples/Teste.jack
 ```
 
 O programa lê o arquivo indicado, identifica os tokens e gera um arquivo XML correspondente. Para o exemplo acima, o arquivo de saída será `examples/TesteT.xml`.
+
+Para analisar sintaticamente um arquivo Jack, o programa também pode receber o caminho de saída como segundo argumento:
+
+```bash
+python src/main.py examples/Teste.jack examples/TesteP.xml
+```
+
+Nesse caso, o arquivo XML de saída representa a árvore sintática do programa.
 
 Para analisar outro arquivo, substitua o caminho pelo arquivo `.jack` desejado.
 
@@ -83,13 +96,17 @@ Na raiz do projeto, execute:
 python -m unittest discover -s tests -v
 ```
 
-O comando executa os testes automatizados para verificar o reconhecimento dos tokens e o tratamento de situações como comentários, strings sem fechamento e caracteres inválidos.
+O comando executa os testes automatizados para verificar o reconhecimento dos tokens, o tratamento de situações inválidas e a estrutura sintática dos programas Jack.
 
 ## 8. Validação
 
-O projeto foi testado com arquivos da linguagem Jack, incluindo `Main.jack`, `Square.jack` e `SquareGame.jack`.
+O projeto utiliza arquivos da linguagem Jack, incluindo `Main.jack`, `Square.jack` e `SquareGame.jack`.
 
-Os arquivos XML gerados foram comparados com os respectivos arquivos XML de referência. A comparação sem diferenças indica que as saídas são idênticas às referências utilizadas.
+Para validar o analisador léxico, os arquivos XML gerados podem ser comparados com os respectivos arquivos XML de referência, como `MainT.xml`, `SquareT.xml` e `SquareGameT.xml`.
+
+Para validar o analisador sintático, os arquivos XML gerados podem ser comparados com `MainP.xml`, `SquareP.xml` e `SquareGameP.xml`, disponibilizados como referências oficiais.
+
+Quando os arquivos são idênticos, a comparação não apresenta diferenças.
 
 ## 9. Integrantes
 
@@ -98,10 +115,7 @@ Os arquivos XML gerados foram comparados com os respectivos arquivos XML de refe
 
 ## 10. Verificação dos arquivos de referência
 
-
-## 10. Verificação dos arquivos de referência
-
-Os arquivos gerados pelo analisador podem ser comparados com os XMLs de referência oficiais usando o PowerShell:
+Os arquivos gerados pelo analisador léxico podem ser comparados com os XMLs de referência usando o PowerShell:
 
 ```powershell
 Compare-Object (Get-Content examples/referencias/MainT.xml) (Get-Content examples/oficiais/MainT.xml)
