@@ -1,64 +1,74 @@
 
-import sys # integra com o terminal
+import sys
 from html import escape
 from pathlib import Path
 
-# importa o analisador em lexer.py
 from lexer import Lexer
+from parser import Parser, ParserError
 
-# transforma a lista de tokens em XML
+
 def tokens_to_xml(tokens):
     lines = ["<tokens>"]
 
     for token_type, value in tokens:
-        safe_value = escape(value, quote=False) # converte os caracteres especiais para representacoes validas no XML
+        safe_value = escape(value, quote=False)
         lines.append(f"<{token_type}> {safe_value} </{token_type}>")
 
     lines.append("</tokens>")
     return "\n".join(lines) + "\n"
 
 
+def compile_file(mode, input_path):
+    input_path = Path(input_path)
+
+    if input_path.suffix.lower() != ".jack":
+        raise ValueError("O arquivo deve ter a extensão .jack.")
+
+    if not input_path.is_file():
+        raise FileNotFoundError(f"Arquivo não encontrado: {input_path}")
+
+    source = input_path.read_text(encoding="utf-8")
+    tokens = Lexer(source).tokenize()
+
+    if mode == "lexer":
+        output_path = input_path.with_name(f"{input_path.stem}T.xml")
+        content = tokens_to_xml(tokens)
+
+    elif mode == "parser":
+        output_path = input_path.with_name(f"{input_path.stem}P.xml")
+        content = Parser(tokens).parse()
+
+    else:
+        raise ValueError("Modo inválido. Use 'lexer' ou 'parser'.")
+
+    output_path.write_text(content, encoding="utf-8")
+
+    return len(tokens), output_path
+
+
 def main():
-    if len(sys.argv) != 2:
-        print("Uso: python src/main.py <arquivo.jack>")
-        sys.exit(1)
+    if len(sys.argv) != 3:
+        print("Uso:")
+        print("  python src/main.py lexer arquivo.jack")
+        print("  python src/main.py parser arquivo.jack")
+        return 1
 
-  
-    file_path = Path(sys.argv[1])
+    mode = sys.argv[1].lower()
 
-    if file_path.suffix.lower() != ".jack":
-        print("Erro: o arquivo deve ter a extensão .jack")
-        sys.exit(1)
+    if mode not in ("lexer", "parser"):
+        print("Erro: o modo deve ser 'lexer' ou 'parser'.")
+        return 1
 
-    if not file_path.is_file():
-        print(f"Erro: arquivo não encontrado: {file_path}")
-        sys.exit(1)
-
-    # localiza e verificar o arquivo
     try:
-        source = file_path.read_text(encoding="utf-8")
-        lexer = Lexer(source)
-        tokens = lexer.tokenize() # identifica os tokens
-
-        output_path = file_path.with_name(file_path.stem + "T.xml") # funcao with_name define o nome do arquivo de saida
-        xml_content = tokens_to_xml(tokens)
-
-        # grava primeiro em um arquivo temporario para evitar XML incompleto
-        temporary_path = output_path.with_name(output_path.name + ".tmp")
-        try:
-            temporary_path.write_text(xml_content, encoding="utf-8")
-            temporary_path.replace(output_path)
-        finally:
-            if temporary_path.exists():
-                temporary_path.unlink()
-
-        print(f"Análise concluída: {len(tokens)} tokens encontrados.")
+        token_count, output_path = compile_file(mode, sys.argv[2])
+        print(f"Análise concluída: {token_count} tokens encontrados.")
         print(f"Arquivo XML gerado: {output_path}")
+        return 0
 
-    except (ValueError, OSError) as error:
-        print(f"Erro ao analisar o arquivo: {error}")
-        sys.exit(1)
+    except (ValueError, OSError, ParserError) as error:
+        print(f"Erro: {error}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
