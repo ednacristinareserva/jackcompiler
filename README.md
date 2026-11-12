@@ -59,7 +59,7 @@ jackcompiler/
 O analisador identifica cinco categorias de tokens:
 
 - **keyword:** palavras reservadas da linguagem, como `class`, `function`, `int` e `return`.
-- **symbol:** símbolos da linguagem, como `{`, `}`, `(`, `)`, `;` e `=`.
+- **symbol:** símbolos da linguagem, como `{`, `}`, `(`, `)` e `;`.
 - **integerConstant:** constantes inteiras entre 0 e 32767.
 - **stringConstant:** constantes de texto delimitadas por aspas duplas.
 - **identifier:** nomes utilizados para identificar classes, variáveis, métodos e outros elementos.
@@ -70,23 +70,23 @@ Comentários de linha (`//`) e de bloco (`/* ... */`), assim como espaços em br
 
 É necessário ter o Python 3 instalado.
 
-Na raiz do projeto, execute o comando abaixo para analisar lexicalmente um arquivo Jack:
+Na raiz do projeto, execute os comandos abaixo:
+
+**Análise léxica:**
 
 ```bash
-python src/main.py examples/Teste.jack
+python src/main.py lexer examples/Teste.jack
 ```
 
-O programa lê o arquivo indicado, identifica os tokens e gera um arquivo XML correspondente. Para o exemplo acima, o arquivo de saída será `examples/TesteT.xml`.
-
-Para analisar sintaticamente um arquivo Jack, o programa também pode receber o caminho de saída como segundo argumento:
+**Análise sintática:**
 
 ```bash
-python src/main.py examples/Teste.jack examples/TesteP.xml
+python src/main.py parser examples/Teste.jack
 ```
 
-Nesse caso, o arquivo XML de saída representa a árvore sintática do programa.
+O modo de execução é informado explicitamente pelo primeiro argumento, que pode ser `lexer` ou `parser`, seguido pelo caminho do arquivo `.jack` que será analisado.
 
-Para analisar outro arquivo, substitua o caminho pelo arquivo `.jack` desejado.
+O programa realiza a análise correspondente e gera o arquivo XML de saída.
 
 ## 7. Como executar os testes
 
@@ -125,7 +125,7 @@ Compare-Object (Get-Content examples/referencias/SquareGameT.xml) (Get-Content e
 
 Quando os arquivos são idênticos, o comando `Compare-Object` não apresenta diferenças.
 
-Os testes automatizados podem ser executados com:
+Os testes automatizados também podem ser executados com:
 
 ```powershell
 python -m unittest discover -s tests -v
